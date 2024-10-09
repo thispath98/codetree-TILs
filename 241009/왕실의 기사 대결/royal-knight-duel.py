@@ -61,11 +61,45 @@ for i, d in orders:
     d = move[d]
 
     # 부딪히는지 구하기
-    pushed_knighs = check(i, d, [])
+    pushed_knights = check(i, d, [])
 
     # 밀 수 있는 경우, 밀기
-    if pushed_knighs:
-        for k_i in pushed_knighs[::-1]:
+    if pushed_knights:
+        # 현재 barrier_range의 위치 찾기
+        max_r = [-1 for _ in range(N)]
+        min_r = [float("inf") for _ in range(N)]
+        max_c = [-1 for _ in range(N)]
+        min_c = [float("inf") for _ in range(N)]
+        for k_i in pushed_knights:
+            for b_r, b_c in knights[k_i][-1]:
+                if max_r[k_i] < b_r:
+                    max_r[k_i] = b_r
+                if min_r[k_i] > b_r:
+                    min_r[k_i] = b_r
+                if max_c[k_i] < b_c:
+                    max_c[k_i] = b_c
+                if min_c[k_i] > b_c:
+                    min_c[k_i] = b_c
+
+        # 인덱스 붙여서, 조건에 맞는 순서대로 정렬
+        max_r = [(max_r[i], i) for i in range(N)]
+        min_r = [(min_r[i], i) for i in range(N)]
+        max_c = [(max_c[i], i) for i in range(N)]
+        min_c = [(min_c[i], i) for i in range(N)]
+        if d == [-1, 0]:
+            # 상일 경우 min_r이 가장 낮은 순서대로
+            pushed_knights = sorted(min_r, key=lambda x: x[0])
+        elif d == [0, 1]:
+            # 우일 경우 max_c이 가장 높은 순서대로
+            pushed_knights = sorted(max_c, key=lambda x: -x[0])
+        elif d == [1, 0]:
+            # 하일 경우 max_r이 가장 높은 순서대로
+            pushed_knights = sorted(max_r, key=lambda x: -x[0])
+        else:
+            # 좌일 경우 min_c이 가장 낮은 순서대로
+            pushed_knights = sorted(min_c, key=lambda x: x[0])
+
+        for _, k_i in pushed_knights:
             traps = 0
             for b_i, (b_r, b_c) in enumerate(knights[k_i][-1]):
                 n_b_r = b_r + d[0]
