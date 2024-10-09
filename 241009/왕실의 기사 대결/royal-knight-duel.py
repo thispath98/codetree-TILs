@@ -99,7 +99,11 @@ for i, d in orders:
             # 좌일 경우 min_c이 가장 낮은 순서대로
             pushed_knights = sorted(min_c, key=lambda x: x[0])
 
-        for _, k_i in pushed_knights:
+        for v_i, k_i in pushed_knights:
+            # 조건이 영역 내에 없을 경우엔 건너뜀
+            if not 0 <= v_i < L:
+                continue
+
             traps = 0
             for b_i, (b_r, b_c) in enumerate(knights[k_i][-1]):
                 n_b_r = b_r + d[0]
@@ -118,8 +122,9 @@ for i, d in orders:
             if k_i != i:
                 after_hp[k_i] -= traps
 
-                # 기사가 죽었을 경우, 맵에서 해제함
+                # 기사가 죽었을 경우, 사망처리 후 맵에서 해제함
                 if after_hp[k_i] <= 0:
+                    alive[k_i] = False
                     for b_r, b_c in knights[k_i][-1]:
                         chess[b_r][b_c].pop()
 
