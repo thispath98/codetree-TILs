@@ -42,8 +42,10 @@ def bfs(board):
                 total_coords.extend(coords)
     return total, total_coords
 
-answer = 0
+answer = []
 for _ in range(K):
+    ans = 0
+
     # 회전수, 열, 행, 보드
     cand = []
     # 3x3 회전
@@ -82,7 +84,7 @@ for _ in range(K):
         for y, x in sorted_coords:
             board[y][x] = item[item_idx]
             item_idx += 1
-        answer += count
+        ans += count
 
     # 연쇄획득
     while True:
@@ -95,6 +97,7 @@ for _ in range(K):
         for y, x in sorted_coords:
             board[y][x] = item[item_idx]
             item_idx += 1
-        answer += count
+        ans += count
+    answer.append(ans)
 
-print(answer)
+print(*answer)
