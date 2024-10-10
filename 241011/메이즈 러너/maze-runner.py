@@ -18,7 +18,7 @@ def move_fn():
         cur_dist = get_dist(r, c, *exit_coord)
         for dr, dc in move: # 상 하 좌 우 순
             nr, nc = r + dr, c + dc
-            if board[nr][nc] == 0:
+            if 1 <= nr <= N and 1 <= nc <= N and board[nr][nc] == 0:
                 dist = get_dist(nr, nc, *exit_coord)
                 if dist < cur_dist:
                     cur_dist = dist
